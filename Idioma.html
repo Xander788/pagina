@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="js/translations.js"></script>
+    <meta charset="UTF-8">
+    <title>Idioma - Deli Pollo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --rojo: #f44336;
+            --rojo-hover: #d32f2f;
+            --blanco: #ffffff;
+            --gris-claro: #fffaf5;
+        }
+
+        body {
+            background-color: var(--gris-claro);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .navbar {
+            background-color: var(--rojo) !important;
+        }
+
+        .btn-danger {
+            background-color: var(--rojo);
+            border-color: var(--rojo);
+        }
+
+        .btn-danger:hover {
+            background-color: var(--rojo-hover);
+            border-color: var(--rojo-hover);
+        }
+
+        .text-danger {
+            color: var(--rojo) !important;
+        }
+
+        .bg-danger {
+            background-color: var(--rojo) !important;
+        }
+
+        .card, .product-card, .modal-content {
+            border: none !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .price-tag {
+            background: #ffebee;
+            color: var(--rojo);
+        }
+
+        /* Badge para el carrito */
+        .cart-badge {
+            font-size: 0.7rem;
+        }
+
+        /* Estilos para el modo administrador */
+        .admin-badge {
+            font-size: 0.7rem;
+        }
+
+        .sidebar {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            height: fit-content;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold" href="Menu.html">
+                <i class="bi bi-house-door-fill"></i> Deli Pollo
+            </a>
+
+            <div class="d-flex align-items-center">
+                <a href="Carrito.html" class="btn me-2 position-relative">
+                    <i class="bi bi-cart-fill"></i>
+                    <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge" style="display: none;">
+                        0
+                    </span>
+                </a>
+
+                <!-- Dropdown Configuración -->
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="configDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-gear-fill"></i>
+                        <span id="adminBadge" class="admin-badge badge bg-warning ms-1" style="display: none;">Admin</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="configDropdown">
+                        <li><a class="dropdown-item" href="MenuInicioSesion.html">Mi cuenta</a></li>
+                        <li><a class="dropdown-item" href="SobreNosotros.html">Sobre Nosotros</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#languageModal">Idioma</a></li>
+                        <li id="adminMenuItem" style="display: none;"><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#adminModal">Panel Admin</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li id="loginMenuItem"><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a></li>
+                        <li id="logoutMenuItem" style="display: none;"><a class="dropdown-item text-danger" href="#" onclick="logout()">Cerrar sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="catalogo" class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3 border-end">
+                    <div class="list-group">
+                        <a href="MenuInicioSesion.html" class="list-group-item list-group-item-action">Cuenta</a>
+                        <a href="Idioma.html" class="list-group-item list-group-item-action active">Idioma</a>
+                        <a href="MetodosPago.html" class="list-group-item list-group-item-action">Métodos de Pago</a>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <i class="bi bi-globe" style="font-size: 4rem; color: #f44336;"></i>
+                            </div>
+
+                            <div class="container py-4">
+                                <h2 class="text-center mb-4">Idioma</h2>
+
+                                <p class="text-center mb-4">Seleccione un idioma:</p>
+
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <select class="form-select mb-3" id="languageSelectPage">
+                                            <option value="es">Español</option>
+                                            <option value="en">English</option>
+                                            <option value="fr">Français</option>
+                                        </select>
+
+                                        <button class="btn btn-danger w-100" onclick="saveLanguageFromPage()">Guardar Cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Idioma -->
+    <div class="modal fade" id="languageModal" tabindex="-1" aria-labelledby="languageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center fw-bold" id="languageModalLabel">Idioma</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-globe" style="font-size: 5rem; color: #f44336;"></i>
+                    </div>
+                    <p class="text-center text-muted mb-4">
+                        Selecciona tu idioma preferido:
+                    </p>
+                    <form id="languageForm">
+                        <div class="mb-3">
+                            <select class="form-select" id="languageSelect">
+                                <option value="es">Español</option>
+                                <option value="en">English</option>
+                                <option value="fr">Français</option>
+                            </select>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center fw-bold" id="loginModalLabel">Inicio de Sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-2">
+                        <i class="bi bi-person-circle" style="font-size: 5rem; color: gray;"></i>
+                    </div>
+                    <form id="loginForm">
+                        <div class="mb-2">
+                            <label for="usuario" class="form-label">Nombre de Usuario</label>
+                            <input type="text" class="form-control" id="usuario" placeholder="Ingrese su usuario" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" required>
+                        </div>
+                        <div class="d-grid mb-2">
+                            <button type="submit" class="btn btn-danger w-100">Ingresar</button>
+                        </div>
+                    </form>
+                    <div class="text-center mb-2">
+                        <p class="text-muted">O inicia sesión con</p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <button class="btn btn-outline-danger"><i class="bi bi-google me-2"></i>Google</button>
+                            <button class="btn btn-outline-primary"><i class="bi bi-facebook me-2"></i>Facebook</button>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#resetModal" data-bs-dismiss="modal">🔑 Restablecer contraseña</a>
+                        <a href="#" class="d-block" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">🧾 Crear una cuenta</a>
+                        <a href="Menu.html" class="d-block">👤 Ingresar como invitado</a>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 d-flex flex-column align-items-center mt-1">
+                    <p class="mb-2 fw-semibold">Contáctanos:</p>
+                    <div class="d-flex flex-column align-items-center">
+                        <p class="mb-1"><i class="bi bi-envelope-fill me-2 text-primary"></i>DelpolloAttCli@gmail.com</p>
+                        <p class="mb-0"><i class="bi bi-whatsapp me-2 text-success"></i>+506 0000-0000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center fw-bold" id="registerModalLabel">Crear Cuenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-person-circle" style="font-size: 5rem; color: gray;"></i>
+                    </div>
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="nuevoUsuario" class="form-label">Nombre de Usuario</label>
+                            <input type="text" class="form-control" id="nuevoUsuario" placeholder="Ingrese su nombre de usuario" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="correo" placeholder="Ingrese su correo electrónico" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nuevaPassword" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="nuevaPassword" placeholder="Cree una contraseña" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmarPassword" class="form-label">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" id="confirmarPassword" placeholder="Confirme su contraseña" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger">Crear Cuenta</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light border-0 d-flex flex-column align-items-center mt-3">
+                    <p class="text-muted">¿Ya tienes una cuenta?</p>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Inicia Sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Restablecer Contraseña -->
+    <div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center fw-bold" id="resetModalLabel">Restablecer Contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-key-fill" style="font-size: 5rem; color: gray;"></i>
+                    </div>
+                    <p class="text-center text-muted mb-4">
+                        Ingresa tu correo electrónico para recibir un enlace de restablecimiento de contraseña.
+                    </p>
+                    <form id="resetForm">
+                        <div class="mb-3">
+                            <label for="correoReset" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="correoReset" placeholder="Ingrese su correo" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger fw-semibold">Enviar enlace</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light border-0 d-flex flex-column align-items-center mt-3">
+                    <p class="text-muted">¿Recordaste tu contraseña?</p>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Volver a iniciar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Administrador -->
+    <div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="adminModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content shadow-lg rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title w-100 text-center fw-bold" id="adminModalLabel">Panel de Administración</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-shield-check" style="font-size: 5rem; color: #f44336;"></i>
+                    </div>
+                    
+                    <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="products-tab" data-bs-toggle="tab" data-bs-target="#products" type="button" role="tab">Productos</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="combos-tab" data-bs-toggle="tab" data-bs-target="#combos" type="button" role="tab">Combos</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab">Pedidos</button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content p-3" id="adminTabContent">
+                        <div class="tab-pane fade show active" id="products" role="tabpanel">
+                            <h5>Gestión de Productos</h5>
+                            <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">Agregar Producto</button>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Precio</th>
+                                            <th>Categoría</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productsTable">
+                                        <!-- Los productos se cargarán dinámicamente aquí -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="combos" role="tabpanel">
+                            <h5>Gestión de Combos</h5>
+                            <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addComboModal">Agregar Combo</button>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Precio</th>
+                                            <th>Productos</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="combosTable">
+                                        <!-- Los combos se cargarán dinámicamente aquí -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="orders" role="tabpanel">
+                            <h5>Gestión de Pedidos</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Cliente</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                            <th>Fecha</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ordersTable">
+                                        <!-- Los pedidos se cargarán dinámicamente aquí -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert para mostrar mensajes -->
+    <div id="customAlert" class="alert alert-success custom-alert" style="display: none;">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span id="alertMessage"></span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // ========== GESTIÓN DE USUARIOS ==========
+        
+        // Función para obtener usuarios del localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users')) || [];
+        }
+        
+        // Función para guardar usuarios en localStorage
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        
+        // Función para obtener el usuario actual
+        function getCurrentUser() {
+            return JSON.parse(localStorage.getItem('currentUser')) || null;
+        }
+        
+        // Función para guardar el usuario actual
+        function saveCurrentUser(user) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+        }
+        
+        // Función para registrar un nuevo usuario
+        function registerUser(username, email, password) {
+            const users = getUsers();
+            
+            // Verificar si el usuario ya existe
+            if (users.find(user => user.username === username)) {
+                showAlert('El nombre de usuario ya existe', 'danger');
+                return false;
+            }
+            
+            if (users.find(user => user.email === email)) {
+                showAlert('El correo electrónico ya está registrado', 'danger');
+                return false;
+            }
+            
+            // Crear nuevo usuario
+            const newUser = {
+                id: Date.now(),
+                username: username,
+                email: email,
+                password: password,
+                isAdmin: username === 'admin' // Por simplicidad, el usuario 'admin' será administrador
+            };
+            
+            users.push(newUser);
+            saveUsers(users);
+            
+            // Iniciar sesión automáticamente
+            saveCurrentUser(newUser);
+            updateUIForUser(newUser);
+            
+            showAlert('¡Cuenta creada exitosamente!');
+            return true;
+        }
+        
+        // Función para iniciar sesión
+        function loginUser(username, password) {
+            const users = getUsers();
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                saveCurrentUser(user);
+                updateUIForUser(user);
+                showAlert(`¡Bienvenido, ${user.username}!`);
+                return true;
+            } else {
+                showAlert('Usuario o contraseña incorrectos', 'danger');
+                return false;
+            }
+        }
+        
+        // Función para cerrar sesión
+        function logout() {
+            localStorage.removeItem('currentUser');
+            updateUIForUser(null);
+            showAlert('Sesión cerrada correctamente');
+        }
+        
+        // Función para actualizar la UI según el usuario
+        function updateUIForUser(user) {
+            const loginMenuItem = document.getElementById('loginMenuItem');
+            const logoutMenuItem = document.getElementById('logoutMenuItem');
+            const adminMenuItem = document.getElementById('adminMenuItem');
+            const adminBadge = document.getElementById('adminBadge');
+            
+            if (user) {
+                loginMenuItem.style.display = 'none';
+                logoutMenuItem.style.display = 'block';
+                
+                if (user.isAdmin) {
+                    adminMenuItem.style.display = 'block';
+                    adminBadge.style.display = 'inline';
+                } else {
+                    adminMenuItem.style.display = 'none';
+                    adminBadge.style.display = 'none';
+                }
+            } else {
+                loginMenuItem.style.display = 'block';
+                logoutMenuItem.style.display = 'none';
+                adminMenuItem.style.display = 'none';
+                adminBadge.style.display = 'none';
+            }
+        }
+        
+        // ========== GESTIÓN DE IDIOMA ==========
+        
+        // Función para obtener el idioma actual
+        function getCurrentLanguage() {
+            return localStorage.getItem('language') || 'es';
+        }
+        
+        // Función para guardar el idioma
+        function saveLanguage(language) {
+            localStorage.setItem('language', language);
+            applyLanguage(language);
+        }
+        
+        // Función para aplicar el idioma
+        function applyLanguage(language) {
+            const translations = {
+                es: {
+                    // Textos en español
+                },
+                en: {
+                    // Textos en inglés
+                },
+                fr: {
+                    // Textos en francés
+                }
+            };
+            
+            // Aquí se aplicarían las traducciones a los elementos de la página
+            // Por simplicidad, solo actualizamos el selector
+            document.getElementById('languageSelect').value = language;
+            document.getElementById('languageSelectPage').value = language;
+        }
+        
+        // Función para guardar idioma desde la página
+        function saveLanguageFromPage() {
+            const language = document.getElementById('languageSelectPage').value;
+            saveLanguage(language);
+            showAlert('Idioma cambiado correctamente');
+        }
+        
+        // ========== GESTIÓN DEL CARRITO ==========
+        
+        // Función para obtener el carrito del localStorage
+        function getCart() {
+            try {
+                return JSON.parse(localStorage.getItem('cart')) || [];
+            } catch (error) {
+                console.error('Error al obtener el carrito:', error);
+                return [];
+            }
+        }
+        
+        // Función para actualizar la cantidad en el ícono del carrito
+        function updateCartCount() {
+            const cart = getCart();
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartBadge = document.getElementById('cartBadge');
+            
+            if (cartBadge) {
+                if (totalItems > 0) {
+                    cartBadge.textContent = totalItems;
+                    cartBadge.style.display = 'block';
+                } else {
+                    cartBadge.style.display = 'none';
+                }
+            }
+        }
+        
+        // ========== GESTIÓN DE ALERTAS ==========
+        
+        // Función para mostrar alertas
+        function showAlert(message, type = 'success') {
+            const alert = document.getElementById('customAlert');
+            const messageElement = document.getElementById('alertMessage');
+            
+            alert.className = `alert alert-${type} custom-alert`;
+            messageElement.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+        
+        // ========== INICIALIZACIÓN ==========
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar carrito
+            updateCartCount();
+            
+            // Inicializar usuario
+            const currentUser = getCurrentUser();
+            updateUIForUser(currentUser);
+            
+            // Inicializar idioma
+            const currentLanguage = getCurrentLanguage();
+            applyLanguage(currentLanguage);
+            
+            // Configurar formularios
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('usuario').value;
+                const password = document.getElementById('password').value;
+                
+                if (loginUser(username, password)) {
+                    const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+                    loginModal.hide();
+                }
+            });
+            
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('nuevoUsuario').value;
+                const email = document.getElementById('correo').value;
+                const password = document.getElementById('nuevaPassword').value;
+                const confirmPassword = document.getElementById('confirmarPassword').value;
+                
+                if (password !== confirmPassword) {
+                    showAlert('Las contraseñas no coinciden', 'danger');
+                    return;
+                }
+                
+                if (registerUser(username, email, password)) {
+                    const registerModal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
+                    registerModal.hide();
+                }
+            });
+            
+            document.getElementById('resetForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                showAlert('Se ha enviado un enlace de restablecimiento a su correo');
+                const resetModal = bootstrap.Modal.getInstance(document.getElementById('resetModal'));
+                resetModal.hide();
+            });
+            
+            document.getElementById('languageForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const language = document.getElementById('languageSelect').value;
+                saveLanguage(language);
+                showAlert('Idioma cambiado correctamente');
+                const languageModal = bootstrap.Modal.getInstance(document.getElementById('languageModal'));
+                languageModal.hide();
+            });
+            
+            // Crear usuario administrador por defecto si no existe
+            const users = getUsers();
+            if (!users.find(user => user.username === 'admin')) {
+                registerUser('admin', 'admin@delipollo.com', 'admin123');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+/* Estilos generales para Deli Pollo */
+:root {
+    --rojo: #f44336;
+    --rojo-hover: #d32f2f;
+    --blanco: #ffffff;
+    --gris-claro: #fffaf5;
+}
+
+body {
+    background-color: var(--gris-claro);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar {
+    background-color: var(--rojo) !important;
+}
+
+.btn-danger {
+    background-color: var(--rojo);
+    border-color: var(--rojo);
+}
+
+.btn-danger:hover {
+    background-color: var(--rojo-hover);
+    border-color: var(--rojo-hover);
+}
+
+.text-danger {
+    color: var(--rojo) !important;
+}
+
+.bg-danger {
+    background-color: var(--rojo) !important;
+}
+
+.card, .product-card, .modal-content {
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.price-tag {
+    background: #ffebee;
+    color: var(--rojo);
+}
+
+/* Hero */
+.hero {
+    background-image: url('https://images.unsplash.com/photo-1604909053167-3f6a9b02a9c7?auto=format&fit=crop&w=1400&q=80');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    padding: 100px 0;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    height: fit-content;
+}
+
+/* Buscador */
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    max-width: 100%;
+}
+
+/* Product cards */
+.product-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    height: 160px;
+    object-fit: contain;
+    margin-top: 15px;
+}
+
+.price-tag {
+    background: #f8d7da;
+    color: #b71c1c;
+    border-radius: 20px;
+    padding: 4px 15px;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.navbar .btn {
+    border: none;
+    color: white;
+}
+
+.navbar .btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Badge para el carrito */
+.cart-badge {
+    font-size: 0.7rem;
+}
+
+/* Estilos para el modo administrador */
+.admin-badge {
+    font-size: 0.7rem;
+}
+
+/* Estilos para la página Sobre Nosotros */
+.about-hero {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1604909053167-3f6a9b02a9c7?auto=format&fit=crop&w=1400&q=80');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.team-member {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.team-member img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.values-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    margin: 40px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
