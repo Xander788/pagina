@@ -89,7 +89,7 @@ function renderCart() {
             <div class="text-center py-5">
                 <i class="bi bi-cart-x" style="font-size: 4rem; color: #6c757d;"></i>
                 <h4 class="mt-3">Tu carrito está vacío</h4>
-                <a href="Menu.html" class="btn btn-danger mt-3">Seguir comprando</a>
+                <a href="index.html" class="btn btn-danger mt-3">Seguir comprando</a>
             </div>
         `;
         totalElement.textContent = '₡0';
